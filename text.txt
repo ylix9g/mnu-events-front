@@ -1,0 +1,9 @@
+.button {
+  background: white;
+  transition-duration: .3s;
+}
+
+.button:hover {
+  background: orange;
+  transition-duration: .5s;
+}
