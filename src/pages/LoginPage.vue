@@ -20,7 +20,7 @@ export default {
       params.append('state', state)
       params.append('code_challenge', challenge.code_challenge)
       params.append('code_challenge_method', 'S256')
-      location.href = `https://inspiring-maxwell.194-39-65-20.plesk.page/oauth/authorize?${params.toString()}`
+      location.href = `http://localhost/oauth/authorize?${params.toString()}`
     },
   },
 }
