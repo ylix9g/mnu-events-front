@@ -87,7 +87,8 @@ export default {
           <p>Название: <span class="event-info-value">{{ event.name }}</span></p>
           <p>Место проведения: <span class="event-info-value">{{ event.location }}</span></p>
           <p>Общее количество мест: <span class="event-info-value">{{ event.limit }}</span></p>
-          <p>Количество доступных мест: <span class="event-info-value">{{ event.limit }}</span></p>
+          <p>Количество подтверждённых участников: <span class="event-info-value">{{ event.confirmed_bookings_count }}</span></p>
+          <p>Количество не подтверждённых участников: <span class="event-info-value">{{ event.unconfirmed_bookings_count }}</span></p>
         </div>
         <div v-else class="no-event">
           Нет события
