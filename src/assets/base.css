@@ -6,6 +6,10 @@
   font-family: 'Roboto', sans-serif;
 }
 
+body {
+  overflow-y: scroll;
+}
+
 .divider {
   height: 1px;
   background: #ccc;

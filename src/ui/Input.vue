@@ -4,6 +4,10 @@ export default {
   props: {
     modelValue: String,
     label: String,
+    placeholder: {
+      type: String,
+      default: '',
+    },
     password: {
       type: Boolean,
       default: false,
@@ -18,6 +22,7 @@ export default {
     <input
         :type="!password ? 'text' : 'password'"
         :value="modelValue"
+        :placeholder="placeholder"
         @input="$emit('update:modelValue', $event.target.value)"
     />
   </div>
@@ -37,7 +42,11 @@ export default {
 
 .text-field input {
   padding: 8px;
-  border: 2px solid darkorchid;
+  border: 2px solid #ccc;
   font-size: 1rem;
+}
+
+.text-field input:focus {
+  border-color: darkorchid;
 }
 </style>

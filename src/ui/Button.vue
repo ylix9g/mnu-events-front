@@ -1,11 +1,17 @@
 <script>
 export default {
   name: 'Button',
+  props: {
+    buttonStyle: {
+      type: String,
+      default: 'primary',
+    }
+  },
 }
 </script>
 
 <template>
-  <button><slot/></button>
+  <button type="button" :class="buttonStyle"><slot/></button>
 </template>
 
 <style scoped>
@@ -20,9 +26,18 @@ export default {
     transition-duration: .3s;
   }
 
+  button.danger {
+    border-color: darkred;
+    color: darkred;
+  }
+
   button:hover {
     background: darkorchid;
     color: white;
     transition-duration: .5s;
+  }
+
+  button.danger:hover {
+    background: darkred;
   }
 </style>

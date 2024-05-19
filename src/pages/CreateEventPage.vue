@@ -16,11 +16,14 @@ export default {
       event: {
         main: false,
         categoryId: null,
+        image: null,
         name: '',
         description: '',
         location: '',
         limit: '',
         start: '',
+        withSectors: false,
+        sectors: [],
       },
       errors: {},
     }
@@ -33,16 +36,35 @@ export default {
         })
   },
   methods: {
+    addSector() {
+      this.event.sectors.push({
+        name: '',
+        limit: '',
+      })
+    },
+    deleteSector(sectorPosition) {
+      this.event.sectors.splice(sectorPosition, 1)
+    },
     createEvent() {
+      const formData = new FormData()
+      formData.append('file', this.event.image)
       axios
-          .post('/api/events/create', {
-            main: this.event.main,
-            category_id: this.event.categoryId,
-            name: this.event.name,
-            description: this.event.description,
-            location: this.event.location,
-            limit: this.event.limit,
-            start: this.event.start,
+          .post('/api/files/upload', formData)
+          .then(response => {
+            const fileName = response.data
+            return axios
+                .post('/api/events/create', {
+                  main: this.event.main,
+                  image: fileName,
+                  category_id: this.event.categoryId,
+                  name: this.event.name,
+                  description: this.event.description,
+                  location: this.event.location,
+                  limit: this.event.limit,
+                  start: this.event.start,
+                  with_sectors: this.event.withSectors,
+                  sectors: this.event.sectors,
+                })
           })
           .then(() => {
             this.$router.push('/events')
@@ -58,7 +80,31 @@ export default {
 <template>
   <SectionContainer title="Добавление нового события">
     <div class="divider"/>
+
     <Checkbox v-model="event.main">Основное событие</Checkbox>
+
+    <div class="divider"/>
+
+    <Checkbox v-model="event.withSectors">Бронирование по секторам</Checkbox>
+
+    <div v-if="event.withSectors">
+
+      <div v-for="(sector, index) in event.sectors" class="sector">
+        <Input v-model="sector.name" placeholder="Название сектора" style="margin: 0;"/>
+        <Input v-model="sector.limit" placeholder="Количество мест сектора" style="margin: 0;"/>
+        <Button button-style="danger" @click="deleteSector(index)">Удалить сектор</Button>
+      </div>
+
+      <Button @click="addSector">Добавить сектор</Button>
+
+    </div>
+
+    <div class="divider"/>
+
+    <input type="file" @change="(event) => this.event.image = event.currentTarget.files[0]"/>
+
+    <div class="divider"/>
+
     <Dropdown
         v-model="event.categoryId"
         label="Категория"
@@ -69,19 +115,20 @@ export default {
     />
 
     <div v-if="errors.name" class="error">{{ errors.name[0] }}</div>
-    <Input v-model="event.name" label="Название"/>
+    <Input v-model="event.name" label="Название" placeholder="Название события"/>
 
     <div v-if="errors.description" class="error">{{ errors.description[0] }}</div>
-    <TextArea v-model="event.description" label="Описание"/>
+    <TextArea v-model="event.description" label="Описание" placeholder="Описание события"/>
 
     <div v-if="errors.location" class="error">{{ errors.location[0] }}</div>
-    <Input v-model="event.location" label="Место проведения"/>
+    <Input v-model="event.location" label="Место проведения" placeholder="Место проведения события"/>
 
     <div v-if="errors.limit" class="error">{{ errors.limit[0] }}</div>
-    <Input v-model="event.limit" label="Максимальное количество участников"/>
+    <Input v-model="event.limit" label="Общее количество мест" placeholder="Общее количество мест"/>
 
     <div v-if="errors.start" class="error">{{ errors.start[0] }}</div>
-    <Input v-model="event.start" label="Дата и время проведения"/>
+    <Input v-model="event.start" label="Дата и время проведения"
+           placeholder="Дата и время проведения в формате гггг-ММ-дд чч:мм"/>
 
     <Button @click="createEvent">Добавить событие</Button>
   </SectionContainer>
@@ -92,5 +139,17 @@ export default {
   font-size: 1rem;
   color: darkred;
   margin-bottom: 5px;
+}
+
+.sector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+.sector > * {
+  flex-grow: 1;
 }
 </style>

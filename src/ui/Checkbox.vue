@@ -41,11 +41,12 @@ export default {
   width: 24px;
   height: 24px;
   margin-right: 15px;
-  border: 2px solid darkorchid;
+  border: 2px solid #ccc;
   transition-duration: .3s;
 }
 
 .checkbox.active .check {
+  border-color: darkorchid;
   background: darkorchid;
   transition-duration: .5s;
 }

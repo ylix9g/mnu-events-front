@@ -12,6 +12,7 @@ export default {
       year: null,
       month: null,
       withEvent: true,
+      loading: true,
       events: {},
     }
   },
@@ -43,6 +44,7 @@ export default {
       this.loadEvents()
     },
     loadEvents() {
+      this.loading = true
       axios
           .get('/api/events/by_date', {
             params: {
@@ -53,6 +55,9 @@ export default {
           })
           .then(response => {
             this.events = response.data
+          })
+          .finally(() => {
+            this.loading = false
           })
     },
     monthName(monthNumber) {
@@ -77,21 +82,26 @@ export default {
       <Button @click="nextMonth">Следующий ({{ monthName(month === 12 ? 1 : month + 1) }})</Button>
     </div>
     <Checkbox v-model="withEvent" @click="loadEvents">Показывать только дни с событиями</Checkbox>
-    <div v-if="withEvent && events.length === 0" class="no-events">
-      На {{ monthName(month) }} {{ year }} нет ни одного события
+    <div v-if="loading">
+      Загрузка событий...
     </div>
-    <div v-else class="event-list">
-      <div v-for="(event, day) in events" class="event-item">
-        <p class="day">{{ day }} {{ monthName(month) }} {{ year }}</p>
-        <div v-if="event" class="event-info">
-          <p>Название: <span class="event-info-value">{{ event.name }}</span></p>
-          <p>Место проведения: <span class="event-info-value">{{ event.location }}</span></p>
-          <p>Общее количество мест: <span class="event-info-value">{{ event.limit }}</span></p>
-          <p>Количество подтверждённых участников: <span class="event-info-value">{{ event.confirmed_bookings_count }}</span></p>
-          <p>Количество не подтверждённых участников: <span class="event-info-value">{{ event.unconfirmed_bookings_count }}</span></p>
-        </div>
-        <div v-else class="no-event">
-          Нет события
+    <div v-else>
+      <div v-if="withEvent && events.length === 0" class="no-events">
+        На {{ monthName(month) }} {{ year }} нет ни одного события
+      </div>
+      <div v-else class="event-list">
+        <div v-for="(event, day) in events" class="event-item">
+          <p class="day">{{ day }} {{ monthName(month) }} {{ year }}</p>
+          <div v-if="event" class="event-info">
+            <p>Название: <span class="event-info-value">{{ event.name }}</span></p>
+            <p>Место проведения: <span class="event-info-value">{{ event.location }}</span></p>
+            <p>Общее количество мест: <span class="event-info-value">{{ event.limit }}</span></p>
+            <p>Количество подтверждённых участников: <span class="event-info-value">{{ event.confirmed_bookings_count }}</span></p>
+            <p>Количество не подтверждённых участников: <span class="event-info-value">{{ event.unconfirmed_bookings_count }}</span></p>
+          </div>
+          <div v-else class="no-event">
+            Нет события
+          </div>
         </div>
       </div>
     </div>

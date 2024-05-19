@@ -7,6 +7,10 @@ export default {
   props: {
     modelValue: String,
     label: String,
+    placeholder: {
+      type: String,
+      default: '',
+    },
   },
 }
 </script>
@@ -16,6 +20,7 @@ export default {
     <label>{{ label }}</label>
     <textarea
         :value="modelValue"
+        :placeholder="placeholder"
         @input="$emit('update:modelValue', $event.target.value)"
     />
   </div>
@@ -37,7 +42,11 @@ export default {
   resize: none;
   height: 200px;
   padding: 8px;
-  border: 2px solid darkorchid;
+  border: 2px solid #ccc;
   font-size: 1rem;
+}
+
+.text-area textarea:focus {
+  border-color: darkorchid;
 }
 </style>

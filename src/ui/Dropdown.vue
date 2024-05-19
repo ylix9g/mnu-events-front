@@ -48,7 +48,7 @@ export default {
 .dropdown {
   position: relative;
   padding: 8px;
-  border: 2px solid darkorchid;
+  border: 2px solid #ccc;
   font-size: 1rem;
   cursor: pointer;
 }
@@ -64,19 +64,27 @@ export default {
   left: -2px;
   width: calc(100% + 4px);
   background: white;
-  border: 2px solid darkorchid;
+  border: 2px solid #ccc;
   visibility: hidden;
   opacity: 0;
-  transition-duration: .3s;
 }
 
 .dropdown .item {
   padding: 8px;
 }
 
+.dropdown .item:hover {
+  background: #f4f4f4;
+}
+
+.dropdown.active {
+  border-color: darkorchid;
+}
+
 .dropdown.active .items {
   visibility: visible;
   opacity: 1;
-  transition-duration: .5s;
+  border-color: darkorchid;
+  border-top-color: #ccc;
 }
 </style>
